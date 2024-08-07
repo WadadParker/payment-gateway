@@ -1,0 +1,44 @@
+---
+title: "Mock Payment Gateway"
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mock Payment Gateway</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="flex items-center justify-center h-screen bg-gray-100">
+  <div id="payment-container" class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+    <h1 class="text-2xl font-semibold mb-4 text-center">Complete Your Payment</h1>
+    <div class="mb-4">
+      <label class="block text-gray-700">Amount:</label>
+      <span id="amount" class="font-bold text-lg">0</span>
+    </div>
+    <div class="mb-4">
+      <label class="block text-gray-700">Rate:</label>
+      <span id="rate" class="font-bold text-lg">0%</span>
+    </div>
+    <button onclick="handlePayment()" class="w-full bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+      Pay Now
+    </button>
+  </div>
+  <script>
+    window.addEventListener('message', function (event) {
+      if (event.data.type === 'INITIATE_PAYMENT') {
+        document.getElementById('amount').textContent = event.data.amount;
+        document.getElementById('rate').textContent = event.data.rate;
+      }
+    });
+
+    function handlePayment() {
+      // Simulate payment processing
+      setTimeout(() => {
+        window.parent.postMessage({ type: 'PAYMENT_SUCCESS', data: { message: 'Payment successful' } }, '*');
+      }, 2000);
+    }
+  </script>
+</body>
+</html>
