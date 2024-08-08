@@ -11,6 +11,7 @@ title: "Mock Payment Gateway"
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js" type="application/javascript"></script>
+
   <script src="https://unpkg.com/siwe" type="application/javascript"></script>
   <style>
     body {
@@ -90,6 +91,19 @@ title: "Mock Payment Gateway"
   </main>
   </div>
   <script>
+    if (typeof window.ethereum !== 'undefined') {
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      await provider.send("eth_requestAccounts", []);
+      const signer = provider.getSigner();
+      console.log('Ethereum provider and accounts loaded successfully');
+      console.log('window.ethereum:', window.ethereum);
+    } else {
+      console.error('No Ethereum provider detected. Please install MetaMask.');
+      alert('Please install MetaMask or another Ethereum wallet to proceed.');
+    }
+
+  </script>
+  <script>
     window.addEventListener('message', function (event) {
       if (event.data.type === 'INITIATE_PAYMENT') {
         document.getElementById('amount').textContent = event.data.amount;
@@ -113,6 +127,19 @@ title: "Mock Payment Gateway"
         const mainContent = document.getElementById('main-content');
         loadingDiv.classList.remove('hidden');
         mainContent.classList.add('hidden');
+
+        try {
+          const provider = new ethers.providers.Web3Provider(window.ethereum);
+          await provider.send("eth_requestAccounts", []);
+          const signer = provider.getSigner();
+          console.log('Provider initialized:', provider);
+          console.log('Signer address:', await signer.getAddress());
+        } catch (error) {
+          console.error('Error initializing provider:', error);
+          alert('Error initializing provider: ' + error.message);
+        }
+
+        console.log('window.ethereum:', window.ethereum);
 
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         const signer = provider.getSigner();
