@@ -45,12 +45,12 @@ title: "Mock Payment Gateway"
       </aside>
     <section class="text-center mt-4 mb-6 flex justify-center gap-x-4 items-center">
       <p class=" text-2xl font-semibold tracking-[-0.96px] text-[#6A6A6A]">Pay with</p>
-      <aside class="flex flex-col justify-center gap-y-1 py-1 px-2 bg-[#F6F6F6] rounded-sm">
+      <button id="btc" class="flex flex-col justify-center gap-y-1 py-1 px-2 bg-[#F6F6F6] rounded-sm hover:cursor-pointer">
         <img src="/assets/btc.png" class="size-8" />
-        <span class="text-[#6A6A6A] font-semibold text-[8px] tracking-tight">BTC</span>
+        <span class="text-[#6A6A6A] font-semibold text-[8px] tracking-tight self-center">BTC</span>
         
-      </aside>
-      <aside class="flex flex-col gap-y-1 py-1 px-2 bg-[#F6F6F6] rounded-sm">
+      </button>
+      <button id="wbtc" class="flex flex-col gap-y-1 py-1 px-2 bg-[#F6F6F6] rounded-sm hover:cursor-pointer">
         <svg xmlns="http://www.w3.org/2000/svg" width="33" height="33" viewBox="0 0 33 33" fill="none">
           <g clip-path="url(#clip0_256_583)">
           <path d="M26.5925 7.6416L25.7139 8.52023C27.8104 10.813 28.9731 13.8073 28.9731 16.9142C28.9731 20.021 27.8104 23.0153 25.7139 25.3081L26.5925 26.1867C28.9241 23.6576 30.2186 20.3438 30.2186 16.9039C30.2186 13.464 28.9241 10.1502 26.5925 7.62109V7.6416Z" fill="#5A5564"/>
@@ -66,8 +66,8 @@ title: "Mock Payment Gateway"
           </clipPath>
           </defs>
         </svg>
-          <span class="text-[#6A6A6A] font-semibold text-[8px] tracking-tight">BTC</span>
-      </aside>
+          <span class="text-[#6A6A6A] font-semibold text-[8px] tracking-tight text-center self-center">BTC</span>
+      </button>
     </section>
     <footer class=" flex items-center text-center justify-center gap-x-2 text-[#D4D4D4] tracking-[-0.32] text-[8px] mt-9">
       <p>Powered by </p>
@@ -75,22 +75,83 @@ title: "Mock Payment Gateway"
     </footer>
   </main>
   </div>
+
+  <!-- <body class="flex items-center justify-center h-screen bg-bg">
+    <div class="bg-[#F9F9F9] pb-2 pt-2 px-6 rounded-[10px] shadow-lg w-full max-w-md">
+      <header class="flex items-center mb-2">
+        <h1 class="text-2xl text-bg font-light tracking-[-1.07px] px-1.5 rounded-md bg-text">SHOPI</h1>
+        <span class="ml-0.5 text-xs self-end text-bg-gray">0.1</span>
+      </header>
+      <hr class="bg-transparent h-1 border-t-2 mb-1.5 border-bg border-dashed" />
+      <main class="bg-white py-3">
+      <section class="p-4 mb-1 text-center flex flex-col py-8 px-10 mx-9 border border-[#F1F1F1] rounded-[10px]">
+        <p class="text-[3.9375rem] font-black tracking-[-1.6px]"><span class="text-[#535353]">₿</span> <span id="amount"></span>2.75</p>
+        <small class="text-[14px] text-[#D4D4D4] ml-[67%] flex items-center hover:cursor-pointer hover:underline">+fees 
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 8 8" fill="none">
+            <g clip-path="url(#clip0_256_575)">
+            <path d="M6.92155 1.16843C5.48238 -0.394626 3.14761 -0.39618 1.70665 1.16493C0.26571 2.72609 0.26426 5.25874 1.70345 6.82181C3.1426 8.38487 5.47741 8.38642 6.91837 6.82529C8.35929 5.26417 8.36074 2.73148 6.92155 1.16843ZM4.82737 6.5333C4.82737 6.59502 4.78126 6.645 4.7244 6.645H3.90062C3.84376 6.645 3.79765 6.59502 3.79765 6.5333V3.21609C3.79765 3.15437 3.84376 3.10439 3.90062 3.10439H4.7244C4.78126 3.10439 4.82737 3.15435 4.82737 3.21609V6.5333ZM4.31251 2.64083C3.98322 2.64083 3.7153 2.35024 3.7153 1.99302C3.7153 1.63585 3.9832 1.3452 4.31251 1.3452C4.64182 1.3452 4.90972 1.63583 4.90972 1.99302C4.90972 2.35024 4.64178 2.64083 4.31251 2.64083Z" fill="#D5D5D5"/>
+            </g>
+            <defs>
+            <clipPath id="clip0_256_575">
+            <rect width="7.375" height="8" fill="white" transform="translate(0.625 -0.00488281)"/>
+            </clipPath>
+            </defs>
+            </svg>
+        </small>
+      </section>
+        <aside class="flex flex-col justify-center text-[10.5px] text-[#B5B5B5] font-bold">
+          <p class="text-center">Wallet connected <span class="text-[#909090] font-light">0xdfF8c2Db78855748460C4431A6e165eF254a25ec</span></p>
+          <a class="text-right mr-10" href="#" class="underline">Change</a>
+        </aside>
+      <section class="text-center mt-4 mb-6 flex justify-center gap-x-4 items-center">
+        <p class="text-[2.625rem] font-semibold tracking-[-0.96px] text-[#6A6A6A]">Pay with</p>
+        <aside class="flex flex-col justify-center gap-y-1 py-1 px-2 bg-[#F6F6F6] rounded-sm">
+          <img src="/assets/btc.png" class="size-11" />
+          <span class="text-[#6A6A6A] font-semibold text-[14px] tracking-tight">BTC</span>
+          
+        </aside>
+        <aside class="flex flex-col gap-y-1 py-1 px-2 bg-[#F6F6F6] rounded-sm">
+          <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 33 33" fill="none">
+            <g clip-path="url(#clip0_256_583)">
+            <path d="M26.5925 7.6416L25.7139 8.52023C27.8104 10.813 28.9731 13.8073 28.9731 16.9142C28.9731 20.021 27.8104 23.0153 25.7139 25.3081L26.5925 26.1867C28.9241 23.6576 30.2186 20.3438 30.2186 16.9039C30.2186 13.464 28.9241 10.1502 26.5925 7.62109V7.6416Z" fill="#5A5564"/>
+            <path d="M8.11496 7.71763C10.4077 5.62106 13.4021 4.4584 16.5089 4.4584C19.6157 4.4584 22.6101 5.62106 24.9028 7.71763L25.7814 6.83899C23.2524 4.50738 19.9385 3.21289 16.4986 3.21289C13.0588 3.21289 9.74489 4.50738 7.21582 6.83899L8.11496 7.71763Z" fill="#5A5564"/>
+            <path d="M7.29185 25.3169C5.19776 23.0246 4.03663 20.0321 4.03663 16.9273C4.03663 13.8226 5.19776 10.8301 7.29185 8.53782L6.41321 7.65918C4.0816 10.1882 2.78711 13.5021 2.78711 16.942C2.78711 20.3818 4.0816 23.6957 6.41321 26.2248L7.29185 25.3169Z" fill="#5A5564"/>
+            <path d="M24.8911 26.1279C22.5983 28.2245 19.604 29.3872 16.4972 29.3872C13.3903 29.3872 10.396 28.2245 8.10325 26.1279L7.22461 27.0066C9.75368 29.3382 13.0676 30.6327 16.5074 30.6327C19.9473 30.6327 23.2612 29.3382 25.7902 27.0066L24.8911 26.1279Z" fill="#5A5564"/>
+            <path d="M22.0474 13.994C21.8716 12.1606 20.2901 11.5456 18.2897 11.3581V8.8335H16.7433V11.3113C16.3362 11.3113 15.9203 11.3113 15.5074 11.3113V8.8335H13.9727V11.3757H10.8359V13.0305C10.8359 13.0305 11.9782 13.01 11.9606 13.0305C12.1665 13.0078 12.3733 13.066 12.5372 13.1927C12.7011 13.3195 12.8094 13.5049 12.8392 13.7099V20.6688C12.8348 20.7411 12.816 20.8117 12.7838 20.8766C12.7516 20.9415 12.7067 20.9993 12.6518 21.0466C12.5979 21.0947 12.5348 21.1315 12.4664 21.1546C12.3979 21.1778 12.3255 21.1868 12.2535 21.1813C12.274 21.1989 11.1288 21.1813 11.1288 21.1813L10.8359 23.0294H13.9434V25.6126H15.4898V23.0674H16.7257V25.6008H18.2751V23.0469C20.8876 22.8888 22.7093 22.2444 22.9377 19.7989C23.1222 17.8308 22.1967 16.9521 20.7177 16.5977C21.6168 16.1555 22.1733 15.3354 22.0474 13.994ZM19.8801 19.4943C19.8801 21.4156 16.5881 21.1959 15.5396 21.1959V17.7868C16.5881 17.7897 19.8801 17.4881 19.8801 19.4943ZM19.1625 14.6911C19.1625 16.4484 16.4153 16.2346 15.5425 16.2346V13.1359C16.4153 13.1359 19.1625 12.8606 19.1625 14.6911Z" fill="#F09242"/>
+            <path d="M16.4971 32.9258C13.3328 32.9252 10.2398 31.9864 7.60906 30.2281C4.97832 28.4698 2.92801 25.9709 1.71737 23.0474C0.506735 20.1239 0.190129 16.907 0.807586 13.8036C1.42504 10.7002 2.94883 7.84954 5.1863 5.61208C7.42376 3.37462 10.2744 1.85082 13.3778 1.23337C16.4813 0.61591 19.6981 0.932516 22.6216 2.14316C25.5451 3.35379 28.044 5.4041 29.8023 8.03484C31.5606 10.6656 32.4994 13.7586 32.5 16.9229C32.5004 19.0245 32.0867 21.1056 31.2826 23.0474C30.4786 24.9891 29.2998 26.7534 27.8137 28.2395C26.3276 29.7256 24.5633 30.9043 22.6216 31.7084C20.6799 32.5125 18.5987 32.9262 16.4971 32.9258ZM16.4971 2.17345C13.5818 2.17577 10.7327 3.04229 8.30981 4.66348C5.88691 6.28467 3.99901 8.58776 2.88473 11.2817C1.77045 13.9755 1.47981 16.9393 2.04954 19.7983C2.61927 22.6574 4.0238 25.2833 6.0856 27.3443C8.1474 29.4053 10.7739 30.8088 13.6332 31.3774C16.4924 31.946 19.4561 31.6542 22.1495 30.5388C24.843 29.4235 27.1453 27.5347 28.7656 25.1111C30.3858 22.6876 31.2512 19.8381 31.2523 16.9229C31.2531 14.9852 30.8719 13.0665 30.1306 11.2762C29.3893 9.48603 28.3024 7.8595 26.932 6.48967C25.5616 5.11983 23.9346 4.03354 22.1441 3.29294C20.3536 2.55233 18.4347 2.17191 16.4971 2.17345Z" fill="#282138"/>
+            </g>
+            <defs>
+            <clipPath id="clip0_256_583">
+            <rect x="0.5" y="0.925781" width="32" height="32" rx="2" fill="white"/>
+            </clipPath>
+            </defs>
+          </svg>
+            <span class="text-[#6A6A6A] font-semibold text-[14px] tracking-tight">BTC</span>
+        </aside>
+      </section>
+      <footer class="flex items-center text-center justify-center gap-x-2 text-[#D4D4D4] tracking-[-0.32] text-[14px] mt-16">
+        <p>Powered by </p>
+        <img src="/assets/garden.png" width="76px" height="22.921px" />
+      </footer>
+    </main>
+    </div> -->
   <script>
     window.addEventListener('message', function (event) {
       if (event.data.type === 'INITIATE_PAYMENT') {
         document.getElementById('amount').textContent = event.data.amount;
       }
     });
-    const button = document.querySelector('#pay')
-    button.addEventListener('click',()=>{
+    const btcButton = document.querySelector('#btc');
+    const wbtcButton = document.querySelector('#wbtc')
+    btcButton.addEventListener('click',()=>{
+      handlePayment()
+    })
+    wbtcButton.addEventListener('click',()=>{
       handlePayment()
     })
 
     function handlePayment() {
-      // Simulate payment processing
-      setTimeout(() => {
-        window.parent.postMessage({ type: 'PAYMENT_SUCCESS', data: { message: 'Payment successful' } }, '*');
-      }, 2000);
+      window.parent.postMessage({ type: 'PAYMENT_SUCCESS', data: { message: 'Payment successful' } }, '*');
     }
   </script>
 </body>
