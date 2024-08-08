@@ -103,7 +103,9 @@ title: "Mock Payment Gateway"
 
   </script>
   <script>
+    // import { InjectedConnector } from 'wagmi/connectors/injected';
     import { SiweMessage } from 'siwe';
+    import client from '../index'
     
     window.addEventListener('message', function (event) {
       if (event.data.type === 'INITIATE_PAYMENT') {
@@ -131,7 +133,7 @@ title: "Mock Payment Gateway"
 
         try {
           const provider = new ethers.providers.Web3Provider(window.ethereum);
-          await provider.send("eth_requestAccounts", []);
+          await provider.send("eth_requestAccounts", [0]);
           const signer = provider.getSigner();
           console.log('Provider initialized:', provider);
           console.log('Signer address:', await signer.getAddress());
@@ -147,9 +149,13 @@ title: "Mock Payment Gateway"
         const address = await signer.getAddress();
         const chainId = (await provider.getNetwork()).chainId;
 
+        console.log("This is address",address);
+
         // Fetch nonce from backend
         const nonceRes = await fetch(`${API_URL}/api/nonce`);
         const nonce = await nonceRes.text();
+
+        console.log(nonce)
 
         // Create SIWE message
         const message = new SiweMessage({
