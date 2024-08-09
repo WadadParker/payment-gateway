@@ -10,6 +10,8 @@ title: "Mock Payment Gateway"
   <title>Mock Payment Gateway</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js" type="application/javascript"></script>
+
   <style>
     body {
       font-family: 'Inter', sans-serif;
@@ -31,9 +33,9 @@ title: "Mock Payment Gateway"
     </div>
 
     <main id="main-content" class="bg-white py-4 h-[440px]">
-    <section class=" p-4 mb-1.5 text-center flex flex-col py-11 px-14 mx-12 border border-[#F1F1F1] rounded-[10px]">
-      <aside class="text-6xl font-black tracking-[-1.6px] space-x-1"><span class="text-[#535353]">₿</span> <span id="amount">2.75</span></aside>
-      <small class="text-[11.2px] text-[#D4D4D4] ml-[74%] flex items-center gap-x-0.5 hover:cursor-pointer hover:underline">+fees 
+    <section class=" p-4 mb-1.5 text-center flex flex-col py-11 px-14 mx-8 border border-[#F1F1F1] rounded-[10px]">
+      <aside class="text-6xl flex font-black tracking-[-1.6px] gap-x-2"><span class="text-[#535353] pr-1">₿</span> <span id="amount">0.001</span></aside>
+      <small class="text-[11.2px] text-[#D4D4D4] ml-[78%] flex items-center gap-x-0.5 hover:cursor-pointer hover:underline">+fees 
         <svg xmlns="http://www.w3.org/2000/svg" width="11" height="12" viewBox="0 0 11 12" fill="none">
           <g clip-path="url(#clip0_256_575)">
           <path d="M9.08142 2.07758C7.05439 0.0143478 3.76592 0.0122965 1.73637 2.07297C-0.29316 4.13369 -0.295203 7.47679 1.73186 9.54005C3.75887 11.6033 7.04739 11.6053 9.07694 9.54463C11.1064 7.48396 11.1085 4.14081 9.08142 2.07758ZM6.13182 9.15921C6.13182 9.24068 6.06688 9.30665 5.98679 9.30665H4.82652C4.74643 9.30665 4.68148 9.24068 4.68148 9.15921V4.78049C4.68148 4.69902 4.74643 4.63305 4.82652 4.63305H5.98679C6.06688 4.63305 6.13182 4.69899 6.13182 4.78049V9.15921ZM5.40665 4.02114C4.94285 4.02114 4.5655 3.63757 4.5655 3.16605C4.5655 2.69457 4.94283 2.31092 5.40665 2.31092C5.87048 2.31092 6.24781 2.69454 6.24781 3.16605C6.24781 3.63757 5.87043 4.02114 5.40665 4.02114Z" fill="#D5D5D5"/>
@@ -88,6 +90,23 @@ title: "Mock Payment Gateway"
   </main>
   </div>
   <script>
+    if (typeof window.ethereum !== 'undefined') {
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      await provider.send("eth_requestAccounts", []);
+      const signer = provider.getSigner();
+      console.log('Ethereum provider and accounts loaded successfully');
+      console.log('window.ethereum:', window.ethereum);
+    } else {
+      console.error('No Ethereum provider detected. Please install MetaMask.');
+      alert('Please install MetaMask or another Ethereum wallet to proceed.');
+    }
+
+  </script>
+  <script>
+    import { Buffer } from 'buffer';
+    window.Buffer = Buffer;
+    import { SiweMessage } from 'siwe';
+    
     window.addEventListener('message', function (event) {
       if (event.data.type === 'INITIATE_PAYMENT') {
         document.getElementById('amount').textContent = event.data.amount;
@@ -103,12 +122,102 @@ title: "Mock Payment Gateway"
       handlePayment()
     })
 
-    function handlePayment() {
-      const loadingDiv = document.getElementById('loading');
-      const mainContent = document.getElementById('main-content');
-      loadingDiv.classList.remove('hidden');
-      mainContent.classList.add('hidden');
-      window.parent.postMessage({ type: 'PAYMENT_SUCCESS', data: { message: 'Payment successful' } }, '*');
+    const API_URL = 'https://api.waves.giving/api/pay';
+
+    async function handlePayment() {
+      try {
+        const loadingDiv = document.getElementById('loading');
+        const mainContent = document.getElementById('main-content');
+        loadingDiv.classList.remove('hidden');
+        mainContent.classList.add('hidden');
+
+        try {
+          const provider = new ethers.providers.Web3Provider(window.ethereum);
+          await provider.send("eth_requestAccounts", [0]);
+          const signer = provider.getSigner();
+          console.log('Provider initialized:', provider);
+          console.log('Signer address:', await signer.getAddress());
+        } catch (error) {
+          console.error('Error initializing provider:', error);
+          alert('Error initializing provider: ' + error.message);
+        }
+
+        console.log('window.ethereum:', window.ethereum);
+
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const signer = provider.getSigner();
+        const address = await signer.getAddress();
+        const chainId = (await provider.getNetwork()).chainId;
+
+        console.log("This is address",address);
+
+        // Fetch nonce from backend
+        const nonceRes = await fetch(`${API_URL}/api/nonce`,{
+          mode: 'no-cors',
+        });
+        const nonce = await nonceRes.text();
+
+        console.log(nonce)
+
+        // Create SIWE message
+        const message = new SiweMessage({
+          domain: window.location.host,
+          address: address,
+          statement: 'Sign in with Ethereum to the app.',
+          uri: window.location.origin,
+          version: '1',
+          chainId: chainId,
+          nonce: nonce,
+        });
+
+        // Sign the message
+        const signature = await signer.signMessage(message.prepareMessage());
+
+        // Payload data
+        const amountBTC = document.getElementById('amount').textContent;
+        const calculatedAmountWBTC = "0.000997"; // This value should come from your swap logic
+        const sendAddress = "tb1q52y3s93nssmw30tj7shhfgcxmpr234wulu7d9k"; // Replace with the actual BTC address
+        const receiveAddress = "0x6E89F34cB9a7EE957ac3226611C6A81b26EC3Ff7"; // Replace with the actual WBTC address
+
+        // Send the request to your backend API
+        const response = await fetch(`${API_URL}/api/pay`, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: {
+            'mode':'no-cors',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            message: message.toMessage(),
+            signature: signature,
+            amount: amountBTC,
+            calculatedamount: calculatedAmountWBTC,
+            sendAddress: sendAddress,
+            receiveAddress: receiveAddress,
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+
+        const responseData = await response.json();
+
+        if (responseData.success) {
+          window.parent.postMessage({ type: 'PAYMENT_SUCCESS', data: { message: 'Payment successful' } }, '*');
+        } else {
+          throw new Error('Transaction failed');
+        }
+      } catch (error) {
+        console.error('Error during payment:', error);
+        alert('Payment failed: ' + error.message);
+      } finally {
+        // Revert back the visibility of main content if needed
+        const loadingDiv = document.getElementById('loading');
+        const mainContent = document.getElementById('main-content');
+        loadingDiv.classList.add('hidden');
+        mainContent.classList.remove('hidden');
+      }
     }
   </script>
 </body>
