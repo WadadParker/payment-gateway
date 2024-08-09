@@ -152,7 +152,9 @@ title: "Mock Payment Gateway"
         console.log("This is address",address);
 
         // Fetch nonce from backend
-        const nonceRes = await fetch(`${API_URL}/api/nonce`);
+        const nonceRes = await fetch(`${API_URL}/api/nonce`,{
+          mode: 'no-cors',
+        });
         const nonce = await nonceRes.text();
 
         console.log(nonce)
@@ -180,7 +182,9 @@ title: "Mock Payment Gateway"
         // Send the request to your backend API
         const response = await fetch(`${API_URL}/api/pay`, {
           method: 'POST',
+          mode: 'no-cors',
           headers: {
+            'mode':'no-cors',
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
