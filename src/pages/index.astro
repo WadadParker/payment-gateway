@@ -103,9 +103,7 @@ title: "Mock Payment Gateway"
 
   </script>
   <script>
-    // import { InjectedConnector } from 'wagmi/connectors/injected';
     import { SiweMessage } from 'siwe';
-    import client from '../index'
     
     window.addEventListener('message', function (event) {
       if (event.data.type === 'INITIATE_PAYMENT') {
